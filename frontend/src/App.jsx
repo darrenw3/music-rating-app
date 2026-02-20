@@ -1,11 +1,11 @@
-import { Route, Routes } from 'react-router-dom'
-import SearchPage from './HomePage'
-import TrackPage from './TrackPage'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import HomePage from './pages/HomePage'
+import TrackPage from './pages/TrackPage'
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<SearchPage />} />
+      <Route path="/" element={<HomePage />} />
       <Route path="/track/:id" element={<TrackPage />} />
     </Routes>
   );
