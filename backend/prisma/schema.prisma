@@ -14,16 +14,18 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
-  email     String   @unique
   googleId  String   @unique
+  email     String   @unique
+  name      String?
+  img       String?
   reviews   Review[]
 }
 
 model Review {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   trackId   String
   rating    Float
   review    String?

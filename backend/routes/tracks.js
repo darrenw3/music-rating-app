@@ -1,13 +1,9 @@
 import express from 'express';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../db.js';
 import { getSpotifyAccessToken } from '../services/spotify.js';
+import { requireAuth } from '../middleware/requireAuth.js';
 
 const router = express.Router();
-
-const connectionString = process.env.DATABASE_URL;
-const adapter = new PrismaBetterSqlite3({ url: connectionString });
-const prisma = new PrismaClient({ adapter });
 
 router.get('/:id', async (req, res) => {
     const token = await getSpotifyAccessToken();
@@ -38,11 +34,10 @@ router.get('/:id', async (req, res) => {
     });
 });
 
-router.post("/:id/review", async (req, res) => {
+router.post("/:id/review", requireAuth, async (req, res) => {
     const trackId = req.params.id;
+    const userId = req.userId;
     const { rating, review } = req.body;
-
-    const userId = 1;
     
     try {
         const newReview = await prisma.review.create({
