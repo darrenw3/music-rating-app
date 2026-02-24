@@ -36,7 +36,11 @@ router.post("/google", async (req, res) => {
         }
 
         const token = jwt.sign(
-            { userId: user.id }, 
+            { 
+                userId: user.id,
+                name,
+                img: picture 
+            }, 
             process.env.JWT_SECRET, 
             { expiresIn: '7d' }
         );

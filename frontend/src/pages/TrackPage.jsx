@@ -22,13 +22,13 @@ export default function TrackPage() {
   const [averageRating, setAverageRating] = useState(null);
 
   useEffect(() => {
-      fetch(`http://localhost:5000/api/track/${id}`)
+      fetch(`http://localhost:5000/api/tracks/${id}`)
           .then(response => response.json())
           .then(setTrack);
   }, [id]);
 
   const loadReviews = async () => {
-    const response = await fetch(`http://localhost:5000/api/track/${id}/reviews`);
+    const response = await fetch(`http://localhost:5000/api/tracks/${id}/reviews`);
 
     if (response.ok) {
         const data = await response.json();
@@ -47,10 +47,11 @@ export default function TrackPage() {
       return;
     }
 
-    const response = await fetch(`http://localhost:5000/api/track/${id}/review`, {
+    const response = await fetch(`http://localhost:5000/api/tracks/${id}/review`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
       },
       body: JSON.stringify({ rating, review }),
     });
@@ -60,7 +61,8 @@ export default function TrackPage() {
       setReview("");
       loadReviews();
     } else {
-      alert("Failed to submit review. Please try again.");
+      const data = await response.json();
+      alert(`Failed to submit review: ${data.error}`);
     }
   };
 
