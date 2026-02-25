@@ -67,8 +67,6 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
     padding: "1rem",
-    // boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
-    // borderBottom: "1px solid #ccc",
   },
   profileWrapper: {
     position: "relative",
@@ -88,7 +86,6 @@ const styles = {
     position: "absolute",
     top: "45px",
     right: 0,
-    //background: "white",
     border: "1px solid #ddd",
     borderRadius: "6px",
     boxShadow: "0 4px 10px rgba(0,0,0,0.1)",

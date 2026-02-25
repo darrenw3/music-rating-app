@@ -10,15 +10,24 @@ import {
   Stack,
   Box,
   IconButton,
-  CardMedia
+  CardMedia,
+  Select,
+  MenuItem,
+  InputAdornment
 } from '@mui/material'
 
 export default function HomePage() {
   const [query, setQuery] = useState("");
+  const [queryType, setQueryType] = useState("track");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const placeholders = {
+    track: "Search for a track",
+    album: "Search for an album",
+    artist: "Search for an artist"
+  }
 
   const search = async () => {
     const trimmedQuery = query.trim();
@@ -26,9 +35,8 @@ export default function HomePage() {
 
     try {
       setLoading(true);
-      setError("");
 
-      const response = await fetch(`http://localhost:5000/api/search?q=${encodeURIComponent(trimmedQuery)}`);
+      const response = await fetch(`http://localhost:5000/api/search/${queryType}?q=${encodeURIComponent(trimmedQuery)}`);
       if (!response.ok) {
         const errorMsg = await response.text();
         throw new Error(errorMsg || 'Search request failed');
@@ -38,7 +46,6 @@ export default function HomePage() {
       setResults(data);
     } catch (err) {
       console.error(err);
-      setError('Error during search: ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -61,17 +68,40 @@ export default function HomePage() {
         <Stack direction="row" spacing={1}>
           <TextField
             fullWidth
-            placeholder="Search for a song"
-            color="primary"
+            placeholder={placeholders[queryType]}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             sx={{
-              backgroundColor: "white",
-              borderRadius: 1
+              backgroundColor: "whitesmoke",
+              borderRadius: 1,
+              input: {
+                color: "black",
+              }
+            }}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start" sx={{ borderRight: "1px solid #ccc", mr: 1, pr: 1 }}>
+                    <Select
+                      variant="standard"
+                      value={queryType}
+                      onChange={(e) => setQueryType(e.target.value)}
+                      sx={{ 
+                        minWidth: 90,
+                        color: "black", 
+                      }}
+                    >
+                      <MenuItem value="track">Track</MenuItem>
+                      <MenuItem value="album">Album</MenuItem>
+                      <MenuItem value="artist">Artist</MenuItem>
+                    </Select>
+                  </InputAdornment>
+                ),
+              },
             }}
           />
 
-          <IconButton onClick={search} disabled={loading}>
+          <IconButton type="submit" disabled={loading}>
             <SearchIcon sx={{ color: "white" }} />
           </IconButton>
         </Stack>
@@ -82,7 +112,7 @@ export default function HomePage() {
           <Card
             key={item.id}
             sx={{ cursor: "pointer", display: "flex", backgroundColor: "#f5f5f5ec" }}
-            onClick={() => navigate(`/track/${item.id}`)}
+            onClick={() => navigate(`/${queryType}/${item.id}`)}
           >
             <CardMedia
               component="img"

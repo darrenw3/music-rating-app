@@ -70,76 +70,6 @@ export default function TrackPage() {
       return <p>Loading...</p>;
   }
   
-//   return (
-//     <div style={{ padding: 24 }}>
-//       <h2>Track Reviews</h2>
-
-//       {/* Average rating */}
-//       <div>
-//         <strong>Average Rating:</strong>{" "}
-//         {averageRating ? averageRating.toFixed(2) : "No ratings yet"}
-//       </div>
-
-//       {/* Submit review */}
-//       <div style={{ marginTop: 20 }}>
-//         <h3>Add Review</h3>
-
-//         <input
-//           type="number"
-//           min="0"
-//           max="5"
-//           step="0.5"
-//           value={rating}
-//           onChange={(e) => setRating(Number(e.target.value))}
-//           placeholder="Rating"
-//         />
-
-//         <br />
-
-//         <textarea
-//           value={reviewText}
-//           onChange={(e) => setReviewText(e.target.value)}
-//           placeholder="Write review"
-//           rows={3}
-//           cols={40}
-//         />
-
-//         <br />
-
-//         <button onClick={submitReview}>
-//           Submit
-//         </button>
-//       </div>
-
-//       {/* Reviews list */}
-//       <div style={{ marginTop: 30 }}>
-//         <h3>All Reviews</h3>
-
-//         {reviews.length === 0 && (
-//           <p>No reviews yet</p>
-//         )}
-
-//         {reviews.map((r) => (
-//           <div
-//             key={r.id}
-//             style={{
-//               border: "1px solid #ccc",
-//               padding: 12,
-//               marginBottom: 10,
-//               borderRadius: 6,
-//             }}
-//           >
-//             <div><strong>Rating:</strong> {r.rating}</div>
-//             <div>{r.review}</div>
-//             <div style={{ fontSize: 12, opacity: 0.6 }}>
-//               {new Date(r.createdAt).toLocaleString()}
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
   
   return (
     <Container maxWidth="sm" sx={{ mt: 4, display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -154,6 +84,7 @@ export default function TrackPage() {
         <CardContent>
           <Typography variant="h5">{track.title}</Typography>
           <Typography color="text.secondary">{track.artist}</Typography>
+          <Typography color="text.secondary">{track.releaseDate}</Typography>
           {averageRating && (
             <Box sx={{ mt: 1, display: "flex", alignItems: "center" }}>
               <Rating value={averageRating} precision={0.1} readOnly />
@@ -178,7 +109,13 @@ export default function TrackPage() {
           multiline
           minRows={3}
           fullWidth
-          sx={{ mt: 2, backgroundColor: "white", borderRadius: 1 }}
+          sx={{ mt: 2, 
+            backgroundColor: "white", 
+            borderRadius: 1,
+            "& .MuiInputBase-input": {
+                color: "black",
+            },
+          }}
           value={review}
           onChange={(e) => setReview(e.target.value)}
         />
