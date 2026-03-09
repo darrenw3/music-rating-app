@@ -1,6 +1,12 @@
 import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
-export default function GoogleLoginButton() {
+export default function GoogleLoginButton({ setUser }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
   useEffect(() => {
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -32,7 +38,9 @@ export default function GoogleLoginButton() {
     const data = await res.json();
 
     localStorage.setItem("token", data.token);
-    window.location.href = "/"; 
+    const { userId, name, img } = jwtDecode(data.token);
+    setUser({ userId, name, img });
+    navigate(from, { replace: true });
   }
 
   return <div id="googleBtn"></div>;

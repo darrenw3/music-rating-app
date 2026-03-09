@@ -26,10 +26,11 @@ model Review {
   createdAt DateTime @default(now())
   userId    Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  spotifyId   String
+  deezerId  String
+  type      String
   rating    Float
   review    String?
 
 
-  @@unique([userId, spotifyId])
+  @@unique([userId, deezerId, type])
 }

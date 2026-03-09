@@ -98,14 +98,14 @@ export default function AlbumPage() {
         </Card>
 
         <Stack spacing={1} sx={{ mb: 4, width: "200%" }}>
-            {album.tracks.map(track => (
+            {album.tracks.map((track, index) => (
                 <Card
                 key={track.id}
                 sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
                 onClick={() => navigate(`/track/${track.id}`)}
                 >
                 <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography>{track.trackNumber}. {track.title}</Typography>
+                    <Typography>{index + 1}. {track.title}</Typography>
                 </CardContent>
                 <Typography sx={{ pr: 2 }}>{track.duration}</Typography>
                 </Card>

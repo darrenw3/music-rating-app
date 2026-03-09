@@ -1,43 +1,34 @@
 import express from 'express';
 import prisma from '../db.js';
-import { getSpotifyAccessToken } from '../services/spotify.js';
 import { requireAuth } from '../middleware/requireAuth.js';
 import { formatDuration } from '../utils/format.js';
 
 const router = express.Router();
 
 router.get('/:id', async (req, res) => {
-    const token = await getSpotifyAccessToken();
     const albumId = req.params.id;
 
-    const response = await fetch(`https://api.spotify.com/v1/albums/${albumId}`, 
-        {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        }
-    );
+    const response = await fetch(`https://api.deezer.com/album/${albumId}`);
 
     if (!response.ok) {
         const error = await response.text();
-        return res.status(500).json({ error: 'Spotify fetch failed: ' + error });
+        return res.status(500).json({ error: 'Deezer fetch failed: ' + error });
     }
 
     const data = await response.json();
     return res.json({
         id: data.id,
-        type: data.type,
-        title: data.name,
-        artist: data.artists.map(artist => artist.name).join(', '),
+        title: data.title,
+        artist: data.artist.name,
         releaseDate: data.release_date,
-        tracks: data.tracks.items.map(track => ({
+        genre: data.genres.data.map(g => g.name).join(', '),
+        tracks: data.tracks.data.map(track => ({
             id: track.id,
-            trackNumber: track.track_number,
-            title: track.name,
-            duration: formatDuration(track.duration_ms)
+            title: track.title,
+            duration: formatDuration(track.duration),
+            previewUrl: track.preview,
         })),
-        image: data.images[0].url || null,
-        spotifyUrl: data.external_urls.spotify
+        image: data.cover,
     });
 });
 
@@ -50,7 +41,8 @@ router.post("/:id/review", requireAuth, async (req, res) => {
         const newReview = await prisma.review.create({
             data: {
                 userId,
-                spotifyId: albumId,
+                deezerId: albumId,
+                type: 'album',
                 rating,
                 review
             }
@@ -69,7 +61,7 @@ router.get("/:id/reviews", async (req, res) => {
     const albumId = req.params.id;
 
     const reviewList = await prisma.review.findMany({
-        where: { spotifyId: albumId },
+        where: { deezerId: albumId, type: 'album' },
         orderBy: { createdAt: 'desc' }
     });
 

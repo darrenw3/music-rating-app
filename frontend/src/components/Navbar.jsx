@@ -1,17 +1,18 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
-function Navbar() {
+function Navbar({ user, setUser }) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const token = localStorage.getItem("token");
-  let user = null;
+  const handleLogin = () => {
+    navigate("/login", { state: { from: location } });
+  };
 
-  if (token) {
-    user = JSON.parse(atob(token.split(".")[1]));
-  }
-
-  function logout() {
+  const handleLogout = () => {
+    setUser(null);
     localStorage.removeItem("token");
     window.location.reload();
   }
@@ -34,7 +35,7 @@ function Navbar() {
 
       <div>
         {!user ? (
-          <button onClick={() => (window.location.href = "/login")}>
+          <button onClick={handleLogin}>
             Sign In
           </button>
         ) : (
@@ -49,7 +50,7 @@ function Navbar() {
 
             {open && (
               <div style={styles.dropdown}>
-                <div style={styles.dropdownItem} onClick={logout}>
+                <div style={styles.dropdownItem} onClick={handleLogout}>
                   Logout
                 </div>
               </div>

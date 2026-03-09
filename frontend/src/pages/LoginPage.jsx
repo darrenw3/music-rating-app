@@ -1,7 +1,7 @@
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import { Container, Typography, Paper } from "@mui/material";
 
-function Login() {
+function Login({ setUser }) {
   return (
     <Container
       maxWidth={false}
@@ -32,23 +32,10 @@ function Login() {
           Sign in to rate your favorite music
         </Typography>
 
-        <GoogleLoginButton />
+        <GoogleLoginButton setUser={setUser} />
       </Paper>
     </Container>
   );
 }
 
 export default Login;
-
-// import { Container, Typography } from "@mui/material";
-
-// export default function LoginPage() {
-//   return (
-//     <Container maxWidth="sm" style={{ textAlign: "center", marginTop: "100px" }}>
-//       <Typography variant="h4" gutterBottom>
-//         Sign in to wavRater
-//       </Typography>
-//       <GoogleLoginButton />
-//     </Container>
-//   );
-// }

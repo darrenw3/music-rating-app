@@ -26,7 +26,7 @@ export default function HomePage() {
   const placeholders = {
     track: "Search for a track",
     album: "Search for an album",
-    artist: "Search for an artist"
+    // artist: "Search for an artist"
   }
 
   const search = async () => {
@@ -93,7 +93,7 @@ export default function HomePage() {
                     >
                       <MenuItem value="track">Track</MenuItem>
                       <MenuItem value="album">Album</MenuItem>
-                      <MenuItem value="artist">Artist</MenuItem>
+                      {/* <MenuItem value="artist">Artist</MenuItem> */ }
                     </Select>
                   </InputAdornment>
                 ),
@@ -111,7 +111,7 @@ export default function HomePage() {
         {results.map((item) => (
           <Card
             key={item.id}
-            sx={{ cursor: "pointer", display: "flex", backgroundColor: "#f5f5f5ec" }}
+            sx={{ cursor: "pointer", display: "flex", backgroundColor: "#f5f5f528" }}
             onClick={() => navigate(`/${queryType}/${item.id}`)}
           >
             <CardMedia
